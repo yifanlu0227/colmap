@@ -243,6 +243,10 @@ void BindSfM(py::module& m) {
                      &MapperOpts::fix_existing_images,
                      "If reconstruction is provided as input, fix the existing "
                      "image poses.")
+      .def_readwrite("use_pose_in_database",
+                     &MapperOpts::use_pose_in_database,
+                     "Whether to use image pose from database as initial pose."
+                     "Useful when you have good initial poses and inject them ")
       .def_readwrite(
           "mapper", &MapperOpts::mapper, "Options of the IncrementalMapper.")
       .def_readwrite("triangulation",

@@ -284,8 +284,15 @@ void IncrementalMapper::RegisterInitialImagePair(
   // Estimate two-view geometry
   //////////////////////////////////////////////////////////////////////////////
 
-  image1.CamFromWorld() = Rigid3d();
-  image2.CamFromWorld() = two_view_geometry.cam2_from_cam1;
+  if (option.use_pose_in_database){
+    const Image& image1_db = database_cache_->Image(image_id1);
+    const Image& image2_db = database_cache_->Image(image_id2);
+    image1.CamFromWorld() = image1_db.CamFromWorldPrior();
+    image2.CamFromWorld() = image2_db.CamFromWorldPrior();
+  } else {
+    image1.CamFromWorld() = Rigid3d();
+    image2.CamFromWorld() = two_view_geometry.cam2_from_cam1;
+  }
 
   const Eigen::Matrix3x4d cam_from_world1 = image1.CamFromWorld().ToMatrix();
   const Eigen::Matrix3x4d cam_from_world2 = image2.CamFromWorld().ToMatrix();

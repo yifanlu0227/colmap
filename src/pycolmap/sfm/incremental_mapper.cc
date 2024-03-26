@@ -90,6 +90,10 @@ void BindIncrementalMapper(py::module& m) {
                      &Opts::fix_existing_images,
                      "If reconstruction is provided as input, fix the existing "
                      "image poses.")
+      .def_readwrite("use_pose_in_database",
+                     &Opts::use_pose_in_database,
+                     "Whether to use image pose from database as initial pose."
+                     "Useful when you have good initial poses and inject them ")
       .def_readwrite("num_threads", &Opts::num_threads, "Number of threads.")
       .def_readwrite("image_selection_method",
                      &Opts::image_selection_method,

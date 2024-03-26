@@ -127,6 +127,10 @@ struct IncrementalMapperOptions {
   // If reconstruction is provided as input, fix the existing image poses.
   bool fix_existing_images = false;
 
+  // Use image pose from database as initial pose
+  // Useful when you have good initial poses and inject them into the database
+  bool use_pose_in_database = false;
+
   IncrementalMapper::Options mapper;
   IncrementalTriangulator::Options triangulation;
 

@@ -515,6 +515,9 @@ int RunModelComparer(int argc, char** argv) {
     std::ofstream file(summary_path, std::ios::trunc);
     THROW_CHECK_FILE_OPEN(file, summary_path);
     PrintComparisonSummary(file, errors);
+    // save the poses transformed to original coordinate
+    reconstruction1.Transform(rec2_from_rec1);
+    reconstruction1.Write(output_path);
   }
   return EXIT_SUCCESS;
 }
