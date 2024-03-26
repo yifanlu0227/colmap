@@ -284,7 +284,7 @@ void IncrementalMapper::RegisterInitialImagePair(
   // Estimate two-view geometry
   //////////////////////////////////////////////////////////////////////////////
 
-  if (option.use_pose_in_database){
+  if (options.use_pose_in_database){
     const Image& image1_db = database_cache_->Image(image_id1);
     const Image& image2_db = database_cache_->Image(image_id2);
     image1.CamFromWorld() = image1_db.CamFromWorldPrior();
