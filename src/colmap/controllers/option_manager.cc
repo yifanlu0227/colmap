@@ -685,6 +685,8 @@ void OptionManager::AddStereoFusionOptions() {
                               &stereo_fusion->cache_size);
   AddAndRegisterDefaultOption("StereoFusion.use_cache",
                               &stereo_fusion->use_cache);
+  AddAndRegisterDefaultOption("StereoFusion.use_mode_to_fuse_color",
+                              &stereo_fusion->use_mode_to_fuse_color);
 }
 
 void OptionManager::AddPoissonMeshingOptions() {

@@ -225,6 +225,10 @@ void BindMVS(py::module& m) {
               "use_cache",
               &SFOpts::use_cache,
               "Flag indicating whether to use LRU cache or pre-load all data")
+          .def_readwrite(
+              "use_mode_to_fuse_color",
+              &SFOpts::use_mode_to_fuse_color,
+              "Flag indicating whether to use LRU cache or pre-load all data")
           .def_readwrite("cache_size",
                          &SFOpts::cache_size,
                          "Cache size in gigabytes for fusion.")

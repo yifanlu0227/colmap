@@ -55,6 +55,38 @@ float Median(std::vector<T>* elems) {
   }
 }
 
+template <typename T>
+T Mode(std::vector<T>* elems) {
+  THROW_CHECK(!elems->empty());
+  
+  // 先将向量排序
+  std::sort(elems->begin(), elems->end());
+  
+  T mode = (*elems)[0];
+  int max_count = 1;
+  int current_count = 1;
+  
+  for (size_t i = 1; i < elems->size(); i++) {
+    if ((*elems)[i] == (*elems)[i - 1]) {
+      current_count++;
+    } else {
+      if (current_count > max_count) {
+        max_count = current_count;
+        mode = (*elems)[i - 1];
+      }
+      current_count = 1;
+    }
+  }
+  
+  // 处理最后一个元素
+  if (current_count > max_count) {
+    mode = (*elems)[elems->size() - 1];
+  }
+  
+  return mode;
+}
+
+
 // Use the sparse model to find most connected image that has not yet been
 // fused. This is used as a heuristic to ensure that the workspace cache reuses
 // already cached images as efficient as possible.
@@ -96,6 +128,7 @@ void StereoFusionOptions::Print() const {
   PrintOption(max_normal_error);
   PrintOption(check_num_images);
   PrintOption(use_cache);
+  PrintOption(use_mode_to_fuse_color);
   PrintOption(cache_size);
   const auto& bbox_min = bounding_box.first.transpose().eval();
   const auto& bbox_max = bounding_box.second.transpose().eval();
@@ -550,12 +583,23 @@ void StereoFusion::Fuse(const int thread_id,
     fused_point.ny = fused_normal.y() / fused_normal_norm;
     fused_point.nz = fused_normal.z() / fused_normal_norm;
 
-    fused_point.r = TruncateCast<float, uint8_t>(
-        std::round(internal::Median(&fused_point_r)));
-    fused_point.g = TruncateCast<float, uint8_t>(
-        std::round(internal::Median(&fused_point_g)));
-    fused_point.b = TruncateCast<float, uint8_t>(
-        std::round(internal::Median(&fused_point_b)));
+    if(options_.use_mode_to_fuse_color){
+      fused_point.r = TruncateCast<float, uint8_t>(
+          std::round(internal::Mode(&fused_point_r)));
+      fused_point.g = TruncateCast<float, uint8_t>(
+          std::round(internal::Mode(&fused_point_g)));
+      fused_point.b = TruncateCast<float, uint8_t>(
+          std::round(internal::Mode(&fused_point_b)));
+      // std::cout << "mode!" << " r color: " << static_cast<int>(fused_point.r) << std::endl;
+    } else {
+      fused_point.r = TruncateCast<float, uint8_t>(
+          std::round(internal::Median(&fused_point_r)));
+      fused_point.g = TruncateCast<float, uint8_t>(
+          std::round(internal::Median(&fused_point_g)));
+      fused_point.b = TruncateCast<float, uint8_t>(
+          std::round(internal::Median(&fused_point_b)));
+      // std::cout << "median!" << " r color: " << static_cast<int>(fused_point.r) << std::endl;
+    }
 
     task_fused_points_[thread_id].push_back(fused_point);
     task_fused_points_visibility_[thread_id].emplace_back(

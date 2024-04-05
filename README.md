@@ -1,6 +1,12 @@
 COLMAP
 ======
 
+Update
+-----
+1. model_comparer will automatically save the poses in the original coordinate.
+2. You can add `--Mapper.use_pose_in_database 1` in `mapper` to use registrated camera poses in database for initialization. (This requires inject existing poses into the database.db)
+3. You can add `--StereoFusion.use_mode_to_fuse_color` in `stereo_fusion` to avoid taking median of the pixel values. This is important for semantic dense reconstruction.
+
 About
 -----
 

@@ -84,6 +84,9 @@ struct StereoFusionOptions {
   // Flag indicating whether to use LRU cache or pre-load all data
   bool use_cache = false;
 
+  // Flag to use mode instead of median to fuse pixel colors to 3D point
+  bool use_mode_to_fuse_color = false;
+
   // Cache size in gigabytes for fusion. The fusion keeps the bitmaps, depth
   // maps, normal maps, and consistency graphs of this number of images in
   // memory. A higher value leads to less disk access and faster fusion, while
